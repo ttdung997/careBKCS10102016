@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<don_kham>
+	<kham_the_luc>
+		<chieu_cao/>
+		<can_nang/>
+		<huyet_ap/>
+	</kham_the_luc>
+	<kham_lam_sang>
+		<noi_khoa>
+			<tuan_hoan>123</tuan_hoan>
+			<phan_loai_tuan_hoan></phan_loai_tuan_hoan>
+			<ho_hap>tốt</ho_hap>
+			<phan_loai_ho_hap></phan_loai_ho_hap>
+			<tieu_hoa>tốt</tieu_hoa>
+			<phan_loai_tieu_hoa></phan_loai_tieu_hoa>
+			<than_tiet_nieu>tốt</than_tiet_nieu>
+			<phan_loai_than_tiet_nieu></phan_loai_than_tiet_nieu>
+			<noi_tiet>tốt</noi_tiet>
+			<phan_loai_noi_tiet></phan_loai_noi_tiet>
+			<co_xuong_khop>tốt</co_xuong_khop>
+			<phan_loai_co_xuong_khop></phan_loai_co_xuong_khop>
+			<than_kinh></than_kinh>
+			<phan_loai_than_kinh>tốt</phan_loai_than_kinh>
+			<tham_than/>
+			<phan_loai_tam_than></phan_loai_tam_than>
+		<tam_than>tốt</tam_than></noi_khoa>
+		<mat>
+			<thi_luc>
+				<mat_trai>10/10</mat_trai>
+				<mat_phai>5/10</mat_phai>
+			</thi_luc>
+			<benh_neu_co>đau mắt đỏ</benh_neu_co>
+			<phan_loai>không tốt</phan_loai>
+		</mat>
+		<tai_mui_hong>
+			<thinh_luc>
+				<tai_trai>bình thường</tai_trai>
+				<tai_phai/>
+			</thinh_luc>
+			<benh_neu_co>đau mắt đỏ</benh_neu_co>
+			<phan_loai/>
+		</tai_mui_hong>
+		<rang_ham_mat>
+			<ham_tren/>
+			<ham_duoi/>
+			<phan_loai/>
+		</rang_ham_mat>
+		<da_lieu>
+			<phan_loai/>
+		</da_lieu>
+	</kham_lam_sang>
+
+	<kham_can_lam_sang>
+		<ket_qua/>
+		<danh_gia/>
+	</kham_can_lam_sang>
+
+	<ket_luan>
+		<phan_loai/>
+		<benh_neu_co/>
+		<bs_kl/>
+	</ket_luan>
+	
+
+</don_kham>

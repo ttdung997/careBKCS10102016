@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Upload website" default="upload">
+
+    <!-- ============================================  -->
+    <!-- Target: upload                                -->
+    <!-- ============================================  -->
+    <target name="upload">
+        <echo msg="Git " />
+		<exec command="git commit -a" passthru="true" />
+		<exec command="git push" passthru="true" />
+        <exec command="sshpass -p 'quanthuy1509' ssh root@quanbka.com '
+				rm -rf /home/quanlybenhvien.quanbka.com/public_html'" />
+	<echo msg="Uploading new files" />
+        
+    </target>
+
+
+</project>

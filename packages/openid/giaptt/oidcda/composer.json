@@ -1,0 +1,17 @@
+{
+    "name": "James/oidcda",
+    "description": "Demo Openid Connect",
+    "authors": [
+        {
+            "name": "GiapTT",
+            "email": "giaptt.hust@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Giaptt\\Oidcda\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
