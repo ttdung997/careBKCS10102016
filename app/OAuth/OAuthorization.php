@@ -37,7 +37,7 @@ class OAuthorization
 	*/
 	public function issueToken(){
 
-		if(Authen::checkLogin()){
+		if(Auth::check()){
 			$accessToken = $this->getAccessToken();
 
 			if(!isset($accessToken)||(isset($accessToken)&&$this->isExpire()==true)){
