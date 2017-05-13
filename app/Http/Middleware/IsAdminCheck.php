@@ -18,7 +18,7 @@ class IsAdminCheck
     public function handle($request, Closure $next)
     {
 
-        if( Authen::getRole() == 4){
+        if( Authen::getRoleAd() == 4){
             return $next($request);
         }
 

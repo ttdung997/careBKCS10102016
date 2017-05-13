@@ -47,7 +47,7 @@ class AuthLocalController extends Controller
             if ($pass == hash('sha256', $hPass . $session_id) )
             {
                 // lưu thông tin đăng nhập vào session
-                Session::put('loggedin', $email . '|admins');   // session : email|table
+                Session::put('loggedin_admin', $email);   // session : email|table
 
                 return redirect('home-admin');
             }
@@ -102,14 +102,28 @@ class AuthLocalController extends Controller
         }
     }
 
+    public function getBackendLogout(Request $request)
+    {
+        Session::forget('loggedin_admin');
+        echo "Get Log Out back end";
+    }
+
+    public function postBackendLogout(Request $request)
+    {
+        Session::forget('loggedin_admin');
+        echo "Post Log Out back end";
+    }
+
+    ////---------------------- Hết phần login, logout back end------------------------------
+
+    ///------------------------ Phần login, logout Front End--------------------------------
     /**
     *   Kiểm tra trc đó user đăng nhập chưa, nếu rồi thì chuyển đến 'home'
     *	không thì hiển thị view 'login'
     */
-    // login frontend
     public function getLogin()
     {
-        if(Authen::checkLogin())
+        if(Auth::check())
         {
             return redirect('home');
         }
@@ -145,9 +159,6 @@ class AuthLocalController extends Controller
                 $idUser = $isExist->id;
                 Auth::loginUsingId($idUser);
 
-                // lưu vào session
-                Session::put('loggedin', $email . '|users');    // session : email|table
-
                 return redirect('home'); 
             }
             else
@@ -176,16 +187,20 @@ class AuthLocalController extends Controller
     */
     public function getLogout()
     {
-        Auth::logout();
+        
         // sử dụng để logout lúc OP logout init
-        $email = Authen::getCurrentUser();
-        $user = DB::table('users')->where('email', $email)->first();
-        if ($user != null && $user->is_local == false) 
+        if (Auth::check())
         {
-            DB::table('users')->where('email', $email)->delete();
+            $email = Auth::user()->email;
+            $user = DB::table('users')->where('email', $email)->first();
+            if ($user != null && $user->is_local == false) 
+            {
+                DB::table('users')->where('email', $email)->delete();
+            }
         }
+        
 
-        Session::forget('loggedin');
+        Auth::logout();
         $ss = str_random(32); // session_state
         $client_id = Session::get('client_id');
         Session::forget('list_providers');
@@ -195,16 +210,19 @@ class AuthLocalController extends Controller
 
     public function postLogout()
     {
-        Auth::logout();
+        
         // sử dụng để logout lúc OP logout init
-        $email = Authen::getCurrentUser();
-        $user = DB::table('users')->where('email', $email)->first();
-        if ($user != null && $user->is_local == false) 
+        if (Auth::check())
         {
-            DB::table('users')->where('email', $email)->delete();
+            $email = Auth::user()->email;
+            $user = DB::table('users')->where('email', $email)->first();
+            if ($user != null && $user->is_local == false) 
+            {
+                DB::table('users')->where('email', $email)->delete();
+            }
         }
-
-        Session::forget('loggedin');
+        
+        Auth::logout();
         $ss = str_random(32); // session_state
         $client_id = Session::get('client_id');
         Session::forget('list_providers');

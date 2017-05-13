@@ -13,6 +13,9 @@ Route::group(['middleware' => 'web'], function(){
 	Route::get('backend/register', 'giaptt\oidcda\controllers\AuthLocalController@getBackendRegister');
 	Route::post('backend/register', 'giaptt\oidcda\controllers\AuthLocalController@postBackendRegister');
 
+	Route::get('backend/logout', 'giaptt\oidcda\controllers\AuthLocalController@getBackendLogout');
+	Route::post('backend/logout', 'giaptt\oidcda\controllers\AuthLocalController@postBackendLogout');
+
 	// Route Login Frontend
 	Route::get('login', 'giaptt\oidcda\controllers\AuthLocalController@getLogin');
 	Route::post('login', 'giaptt\oidcda\controllers\AuthLocalController@postLogin');

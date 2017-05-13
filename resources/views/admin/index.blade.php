@@ -1,4 +1,4 @@
 @extends('admin.layout.master')
 @section('title')
-    Xin chào {{ Authen::getCurrentUserName() }}
+    Xin chào {{ Authen::getNameAdmin() }}
 @stop

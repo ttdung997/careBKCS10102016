@@ -13,23 +13,55 @@ class Authen{
 
 
 	/**
+	*	Hàm xử lý cho Admin
+	*/
+	/**
+	*	Kiểm tra xem admin login chưa
+	*/
+	public static function isAdminLogged()
+	{
+		if (Session::has('loggedin_admin') && Session::get('loggedin_admin') != null) 
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	*	Lấy về email của Admin
+	*/
+	public static function getEmailAdmin()
+	{
+		if (Authen::isAdminLogged())
+		{
+			$email = Session::get('loggedin_admin');
+			return $email;
+		}
+	}
+
+	/**
+	*	Lấy về tên Admin
+	*/
+	public static function getNameAdmin()
+	{
+		$email = Authen::getEmailAdmin();
+		$admin = DB::table('admins')->where('email', $email)->first();
+		if ($admin != null)
+		{
+			return $admin->name;
+		}
+	}
+
+	/**
 	*	@return role_id cua user hien tai
 	*/
-	public static function getRole()
+	public static function getRoleAd()
 	{
-		/**
-		*	Kiểm tra tên bảng trong session, rồi get từ bảng đó ra
-		*/
-		if(Authen::checkLogin())
+		$email = Authen::getEmailAdmin();
+		$admin = DB::table('admins')->where('email', $email)->first();
+		if ($admin != null)
 		{
-			// email|tables
-			$user = Session::get('loggedin');
-			$table = explode('|', $user)[1];
-			$email = explode('|', $user)[0];
-
-			$record = DB::table($table)->where('email', $email)->first();
-			$role = $record->role_id;
-			return $role;
+			return $admin->role_id;
 		}
 	}
 
@@ -46,66 +78,5 @@ class Authen{
 		}
 	}
 
-	// public static function getIdToken()
-	// {
-	// 	$cookieName = config('OpenidConnect.name_cookie_ex');
-	// 	$cookie = Cookie::get($cookieName);
-	// 	$token = explode('|', $cookie)[1];
-	// 	if (RelyingParty::validateIdToken($token)) 
-	// 	{
-	// 		return $token;
-	// 	}
-	// }
 
-	/**
-	*	Hàm trả về email của user đang logged in.
-	*/
-	public static function getCurrentUser()
-	{
-		if (Authen::checkLogin()) 
-		{
-			// email|tables
-			$user = Session::get('loggedin');
-			return explode('|', $user)[0];
-		}
-	}
-
-	/**
-	*	Hàm trả về Name của user đang logged in.
-	*/
-	public static function getCurrentUserName()
-	{
-		if (Authen::checkLogin()) 
-		{
-			// email|tables
-			$user = Session::get('loggedin');
-			$table = explode('|', $user)[1];
-			$email = explode('|', $user)[0];
-
-			$record = DB::table($table)->where('email', $email)->first();
-			return $record->name;
-		}
-	}
-
-	/**
-	*	Hàm check user đã login hay chưa
-	*	@return TRUE nếu đã login, ngược lại FALSE
-	*/
-	public static function checkLogin()
-	{
-		if (Session::has('loggedin') && Session::get('loggedin') != null) 
-		{
-			return true;
-		}
-		return false;
-	}
-
-	// /**
-	// *	Hàm thực hiện xóa user ngoài khỏi DB, khi user này logout.
-	// */
-	// public static function logoutUser()
-	// {
-	// 	$email = Authen::getUserEx();
-	// 	DB::table('users')->where('email', $email)->delete();
-	// }
 }

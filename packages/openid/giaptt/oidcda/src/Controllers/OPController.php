@@ -46,9 +46,9 @@ class OPController extends Controller
             // kiểm tra trc đó user đã đăng nhập chưa
             Session::put('key_encrypt', $isClient->key_secret);
             Session::put('max_age', $isClient->max_age);
-            if (Authen::checkLogin()) 
+            if (Auth::check()) 
             {
-                $email = Authen::getCurrentUser();
+                $email = Auth::user()->email;
                 $name = DB::table('users')->where('email', $email)->first()->name;
                 $auth_at = time();
                 $ss = str_random(32);
@@ -106,7 +106,6 @@ class OPController extends Controller
                 $idUser = $isExist->id;
                 Auth::loginUsingId($idUser);
 
-                Session::put('loggedin', $email . '|users');   // session : email|table
                 $name = $isExist->name;
                 $auth_at = time();
                 $ss = str_random(32);   // session state

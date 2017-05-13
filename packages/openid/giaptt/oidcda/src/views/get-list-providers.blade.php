@@ -60,19 +60,21 @@ Danh sách các Providers
 						    </thead>
 						</table>
 
-                        <!-- Accept/Denied modal -->
+                        <!-- giáp: Delete Provider modal -->
                         <div class="modal fade" id="handleRequestModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
                             <div class="modal-dialog modal-sm" role="document">
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Đóng"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Từ chối yêu cầu</h4>
+                                        <!-- có thể change dùng jQuery-->
+                                        <h4 class="modal-title">Title của Modal</h4> 
                                     </div>
                                     <form>
                                         <div class="modal-body">
                                             <div class="text-center">
-                                                <p>Xác nhận từ chối yêu cầu này?</p>
+                                                <!-- có thể change dùng jQuery-->
+                                                <p>Xác nhận hành động thực hiện yêu cầu này?</p>
                                                 <input type="hidden" id="provider_id" name="provider_id" value="">
                                                 <input type="hidden" id="type_btn_id" name="type_btn_id" value="">
                                             </div>
@@ -83,7 +85,7 @@ Danh sách các Providers
                                     </div>
                                 </div>
                             </div>
-                        </div> <!-- End Accept/Denied modal-->
+                        </div> <!-- giáp: Hết Delete Provider modal-->
 
                         <!-- Kim anh: Modal thêm Role -->
                         <div id="addRole" class="modal fade" role="dialog">

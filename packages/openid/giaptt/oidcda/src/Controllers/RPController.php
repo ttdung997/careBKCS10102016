@@ -93,7 +93,7 @@ class RPController extends Controller
 
     public function getHomeExternal(Request $request)
     {
-        if (Authen::checkLogin()) // đã login
+        if (Auth::check()) // đã login
         {
             $nameCookie = config('OpenidConnect.name_cookie_ex');
             $id_token = $request->cookie($nameCookie);
@@ -110,13 +110,13 @@ class RPController extends Controller
             else
             {
                 echo "ID token ko hop le !";
-                $email = Authen::getCurrentUser();
+                $email = Auth::user()->email;
                 $user = DB::table('users')->where('email', $email)->first();
                 if ($user->is_local == false) 
                 {
                     DB::table('users')->where('email', $email)->delete();
                 }
-                //Session::forget('loggedin');
+                Auth::logout();
             }
             
         }
@@ -190,8 +190,6 @@ class RPController extends Controller
         {
             DB::table('users')->where('email', $email)->delete();
         }
-        //Session::forget('loggedin');
-        //Session::forget('loggedin_role');   
         return redirect('login');
     }
 
@@ -204,8 +202,7 @@ class RPController extends Controller
         {
             DB::table('users')->where('email', $email)->delete();
         }
-        //Session::forget('loggedin');
-        //Session::forget('loggedin_role');
+
         return redirect('login');
     }
 

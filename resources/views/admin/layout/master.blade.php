@@ -43,7 +43,7 @@
             <ul class="user-menu">
                 <li class="dropdown pull-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg>
-                        {{ Authen::getCurrentUser() }}  
+                        {{ Authen::getEmailAdmin() }}  
 
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
@@ -52,12 +52,12 @@
                                                  document.getElementById('logout-form').submit();"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Đăng xuất</a>
                         </li> -->
                         <li>
-                            <a href="{{ url('/logout') }}"
+                            <a href="{{ url('/backend/logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     Đăng xuất
                             </a>
-                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ url('/backend/logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}
                             </form>
                         </li>

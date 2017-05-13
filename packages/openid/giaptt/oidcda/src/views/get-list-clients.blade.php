@@ -65,12 +65,14 @@ Danh sách các Clients
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Đóng"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Từ chối yêu cầu</h4>
+                                        <!-- có thể change dùng jQuery-->
+                                        <h4 class="modal-title">Title của Modal</h4>
                                     </div>
                                     <form>
                                         <div class="modal-body">
                                             <div class="text-center">
-                                                <p>Xác nhận từ chối yêu cầu này?</p>
+                                                <!-- có thể change dùng jQuery-->
+                                                <p>Xác nhận hành động thực hiện yêu cầu này?</p>
                                                 <input type="hidden" id="domain_client" name="domain_client" value="">
                                                 <input type="hidden" id="type_btn_id" name="type_btn_id" value="">
                                             </div>
