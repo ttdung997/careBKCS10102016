@@ -37,6 +37,7 @@ class DoctorController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('web');
         $this->middleware('doctor');
         $this->middleware('oauth2_refresh');
         $this->medicial_mng = new MedicialManagement();

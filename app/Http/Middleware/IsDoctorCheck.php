@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Giaptt\Oidcda\Authen;
 
 class IsDoctorCheck
 {
@@ -17,7 +18,7 @@ class IsDoctorCheck
     public function handle($request, Closure $next)
     {
 
-        if( Auth::user()->position == 2){
+        if( Authen::getPositionUser() == 2){
             return $next($request);
         }
 

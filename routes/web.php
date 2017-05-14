@@ -128,7 +128,8 @@ Route::group(['prefix' => 'staff'], function () {
 });
 
 #Route for Bac si
-Route::group(['prefix' => 'doctor'], function () {
+# giap: them middleware web
+Route::group(['prefix' => 'doctor', 'middleware' => 'web'], function () {
     Route::get('',function(){
       return redirect()->route('doctor-index');
     });

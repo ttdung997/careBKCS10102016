@@ -25,6 +25,10 @@ class AuthLocalController extends Controller
     // login backend
     public function getBackendLogin(Request $request)
     {
+        if (Authen::isAdminLogged())
+        {
+            return redirect('home-admin');
+        }
         $session_id = str_random(32);
         Session::put('sess_id', $session_id);
         return view('oidcda::login-backend', ['sess_id' => $session_id]);
@@ -46,9 +50,11 @@ class AuthLocalController extends Controller
             $hPass = $isExist->password;
             if ($pass == hash('sha256', $hPass . $session_id) )
             {
+                $idUser = $isExist->admin_id;
                 // lưu thông tin đăng nhập vào session
                 Session::put('loggedin_admin', $email);   // session : email|table
 
+                Cookie::queue(config('OpenidConnect.name_cookie_admin'), $email . '|' . $idUser, 120);
                 return redirect('home-admin');
             }
             else
@@ -105,13 +111,17 @@ class AuthLocalController extends Controller
     public function getBackendLogout(Request $request)
     {
         Session::forget('loggedin_admin');
-        echo "Get Log Out back end";
+        Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie_admin')));
+        return redirect('login');
+        //echo "Get Log Out back end";
     }
 
     public function postBackendLogout(Request $request)
     {
         Session::forget('loggedin_admin');
-        echo "Post Log Out back end";
+        Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie_admin')));
+        return redirect('login');
+        //echo "Post Log Out back end";
     }
 
     ////---------------------- Hết phần login, logout back end------------------------------
@@ -123,8 +133,10 @@ class AuthLocalController extends Controller
     */
     public function getLogin()
     {
-        if(Auth::check())
+        if(Authen::isUserLogged())
         {
+            $idUser = Authen::getIdUser();
+            Auth::loginUsingId($idUser);
             return redirect('home');
         }
     	$session_id = str_random(32);
@@ -158,8 +170,13 @@ class AuthLocalController extends Controller
                 // login user manual
                 $idUser = $isExist->id;
                 Auth::loginUsingId($idUser);
+                $cookie = $email . '|' . $idUser;
 
-                return redirect('home'); 
+                Session::put('loggedin_user', $email);
+                
+                Cookie::queue(config('OpenidConnect.name_cookie'), $cookie, 120);
+
+                return redirect('home')->withCookie(config('OpenidConnect.name_cookie'), $cookie, 120); 
             }
             else
             {
@@ -189,45 +206,41 @@ class AuthLocalController extends Controller
     {
         
         // sử dụng để logout lúc OP logout init
-        if (Auth::check())
-        {
-            $email = Auth::user()->email;
-            $user = DB::table('users')->where('email', $email)->first();
-            if ($user != null && $user->is_local == false) 
-            {
-                DB::table('users')->where('email', $email)->delete();
-            }
-        }
-        
-
+        Authen::deleteUserExternal();
         Auth::logout();
         $ss = str_random(32); // session_state
         $client_id = Session::get('client_id');
         Session::forget('list_providers');
+        Session::forget('loggedin_user');
+        Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
+        Cookie::queue(Cookie::forget('accessToken'));
+        Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie')));
+
         return redirect('login')->withCookie('session_state', $ss .'|'. $client_id, 60, '/', null, false, false)
-                ->withCookie(Cookie::forget('accessToken'));
+                ->withCookie(Cookie::forget('accessToken'))
+                ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie')))
+                ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
     }
 
     public function postLogout()
     {
         
         // sử dụng để logout lúc OP logout init
-        if (Auth::check())
-        {
-            $email = Auth::user()->email;
-            $user = DB::table('users')->where('email', $email)->first();
-            if ($user != null && $user->is_local == false) 
-            {
-                DB::table('users')->where('email', $email)->delete();
-            }
-        }
-        
+        Authen::deleteUserExternal();
         Auth::logout();
         $ss = str_random(32); // session_state
         $client_id = Session::get('client_id');
         Session::forget('list_providers');
+        Session::forget('loggedin_user');
+        Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
+        Cookie::queue(Cookie::forget('accessToken'));
+        Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie')));
+
         return redirect('login')->withCookie('session_state', $ss .'|'. $client_id, 60, '/', null, false, false)
-                ->withCookie(Cookie::forget('accessToken'));
+                ->withCookie(Cookie::forget('accessToken'))
+                ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie')))
+                ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
+
     }
 
 
@@ -253,11 +266,11 @@ class AuthLocalController extends Controller
         $isExist = DB::table('users')->where('email', $email)->first();
         if($isExist == null)
         {
-            DB::table('users')->insert([
-                'name' => $name,
-                'email' => $email,
-                'password' => bcrypt($pass)
-            ]);
+            // DB::table('users')->insert([
+            //     'name' => $name,
+            //     'email' => $email,
+            //     'password' => bcrypt($pass)
+            // ]);
             return view('oidcda::register')->with('msg', 'Dang ky tai khoan thanh cong');
         }
         else

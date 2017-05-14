@@ -102,15 +102,26 @@ Route::group(['middleware' => 'web'], function(){
 
 	Route::get('about', 'giaptt\oidcda\controllers\OPController@getAbout');
 
+	/// ------------------------ Test -----------------------------------------
 	Route::get('test-create-cookie', function () {
-		$response = new Illuminate\Http\Response('Hello World');
+		$response = new Illuminate\Http\Response('Da tao cookie: myCookie');
 		$response->withCookie(cookie('myCookie', 'giap123456', 60));
 		return $response;
 		
 	});
 
+	Route::get('test-set-cookie', 'giaptt\oidcda\controllers\OPController@testCreateCookie');
+
+	Route::get('test-del-cookie', 'giaptt\oidcda\controllers\OPController@testDelCookie');
+
+	Route::get('test-get-cookie', 'giaptt\oidcda\controllers\RPController@testGetCurrCookie');
+
+	Route::get('test-get-session', 'giaptt\oidcda\controllers\RPController@testGetCurrSess')->middleware('web');
+
+	Route::get('test-op-get-session', 'giaptt\oidcda\controllers\OPController@testOPGetSess')->middleware('web');
+
 	Route::get('test-get-email-logged', function () {
-		$email = Auth::user()->email;
+		$email = Authen::getEmailUser();
 		echo "email: " . $email;
 		
 	});

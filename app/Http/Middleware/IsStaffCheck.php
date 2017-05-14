@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Giaptt\Oidcda\Authen;
 
 class IsStaffCheck
 {
@@ -17,7 +18,7 @@ class IsStaffCheck
     public function handle($request, Closure $next)
     {
 
-        if( Auth::user()->position == 3){
+        if( Authen::getPositionUser() == 3){
             return $next($request);
         }
 

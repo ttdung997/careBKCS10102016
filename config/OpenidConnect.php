@@ -82,6 +82,11 @@ return [
 	'name_cookie' => 'loggedinstt1',
 
 	/**
+	*	Cấu hình tên cho cookie, khi admin đăng nhập
+	*/
+	'name_cookie_admin' => 'loggedinstt1ad',
+	
+	/**
 	*	tên cookie khi user của viện ngoài đăng nhập vào.
 	*/
 	'name_cookie_ex' => 'tokenLogged',

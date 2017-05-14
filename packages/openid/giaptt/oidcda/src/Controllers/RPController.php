@@ -15,6 +15,7 @@ use Giaptt\Oidcda\Authen;
 use App\MedicalApplication;
 use App\User;
 use Storage;
+use Cookie;
 
 
 
@@ -68,16 +69,14 @@ class RPController extends Controller
             $exp = $data['exp']; // thời gian id_token hết hạn.
             $cookie = $id_token;    // cookie = id_token
 
-            Session::put('loggedin', $email . '|users');    // session : email|table
-
-            // $idUser = DB::table('users')->insertGetId([
-            //         ['name' => $name, 'email' => $email, 'domain' => $domain, 'password' => str_random(32), 
-            //             'position' => 2 ,'is_local' => false]
-            //     ]);
             $idUser = DB::table('users')->insertGetId(
-                array('name' => $name, 'email' => $email, 'domain' => $domain, 'password' => str_random(32), 'position' => 2, 'is_local' => false)
+                array('name' => $name, 'email' => $email, 'domain' => $domain, 'password' => str_random(32), 
+                    'position' => 2, 'is_local' => false)
             );
             Auth::loginUsingId($idUser);
+
+            Session::put('loggedin_user', $email);
+            Cookie::queue(config('OpenidConnect.name_cookie'), $email . '|' . $idUser);
 
             return redirect('doctor/index')->withCookie(config('OpenidConnect.name_cookie_ex'), $cookie, $exp - $iat)
                 ->withCookie('sess_stt', $ssop, $exp - $iat, '/', null, false, false);
@@ -91,6 +90,7 @@ class RPController extends Controller
 
     }
 
+    /// ------------------- ------------------------------------------
     public function getHomeExternal(Request $request)
     {
         if (Auth::check()) // đã login
@@ -116,11 +116,11 @@ class RPController extends Controller
                 {
                     DB::table('users')->where('email', $email)->delete();
                 }
-                Auth::logout();
+                //Auth::logout();
             }
             
         }
-        return redirect('login');
+        //return redirect('login');
     }
 
     /**
@@ -399,5 +399,21 @@ class RPController extends Controller
         }
 
         return Response::json(['flash_message' => 'Đã xóa Provider', 'message_level' => 'success', 'message_icon' => 'check']);
+    }
+
+
+    /// ---------------------------test cookie -----------------------------------
+    public function testGetCurrCookie()
+    {
+        $cookie = Cookie::get('myCookie');
+        echo "Da get cookie";
+        dd($cookie);
+    }
+
+    public function testGetCurrSess()
+    {
+        $session = Session::get('loggedin_user');
+        echo "Da get sess";
+        dd($session);
     }
 }

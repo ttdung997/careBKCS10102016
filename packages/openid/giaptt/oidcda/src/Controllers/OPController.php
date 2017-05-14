@@ -12,6 +12,7 @@ use Giaptt\Oidcda\JsonWT;
 use Session;
 use Giaptt\Oidcda\Authen;
 use Response;
+use Cookie;
 
 /**
 *   OPController: xử lý các yêu cầu xác thực user của các trang Relying Party khác,
@@ -46,8 +47,11 @@ class OPController extends Controller
             // kiểm tra trc đó user đã đăng nhập chưa
             Session::put('key_encrypt', $isClient->key_secret);
             Session::put('max_age', $isClient->max_age);
-            if (Auth::check()) 
+            if (Authen::isUserLogged()) 
             {
+                $idUser = Authen::getIdUser();
+                Auth::loginUsingId($idUser);
+
                 $email = Auth::user()->email;
                 $name = DB::table('users')->where('email', $email)->first()->name;
                 $auth_at = time();
@@ -123,7 +127,13 @@ class OPController extends Controller
                 $id_token = IdProvider::genIdToken($info, $key_encrypt);
                 $uri = $uri_callback . "?id_token=" . $id_token;
 
-                return redirect($uri)->withCookie('session_state', $ss .'|'. $client_id, $max_age * 60, '/', null, false, false);
+                $cookie = $email . '|' . $idUser;
+                Session::put('loggedin_user', $email);
+
+                Cookie::queue(config('OpenidConnect.name_cookie'), $cookie, 120);
+
+                return redirect($uri)->withCookie('session_state', $ss .'|'. $client_id, $max_age * 60, '/', null, false, false)
+                        ->withCookie(config('OpenidConnect.name_cookie'), $cookie, 120);
                 
             }
             else
@@ -230,6 +240,26 @@ class OPController extends Controller
     public function getAbout()
     {
         return view('oidcda::about-openid');
+    }
+
+    //// -------------------------- Test ------------------------------
+    public function testCreateCookie()
+    {
+        Cookie::queue('my_cookie', 'giap123456', 100);
+        echo "Da tao cookie";
+    }
+
+    public function testDelCookie()
+    {
+        Cookie::queue(Cookie::forget('myCookie'));
+        echo "Da Delete cookie";
+    }
+
+    public function testOPGetSess()
+    {
+        $session = Session::get('loggedin_user');
+        echo "Da get sess";
+        dd($session);
     }
 
 }
