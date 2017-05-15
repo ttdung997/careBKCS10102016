@@ -14,8 +14,8 @@
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}" name="myForm" onsubmit="return hashPassword()">
                         {{ csrf_field() }}
-                        <input type="hidden" name="_hashPass" value="">
-                        <input type="hidden" name="_sess_id" value="{{ $sess_id }}">
+                        <input type="hidden" name="_hashPass" id="_hashPass" value="">
+                        <input type="hidden" name="_sess_id" id="_sess_id" value="{{ $sess_id }}">
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
@@ -104,17 +104,19 @@
     function hashPassword(){
       // get pass ng dùng nhập vào
       // var inPass = document.forms['myForm']['password'].value;
-      var inPass = document.getElementById('password').value;
+      //var inPass = document.getElementById('password').value;
+      var inPass = $('#password').val();
       // get session_id from server
-      var sess_id = document.forms['myForm']['_sess_id'].value;
+      //var sess_id = document.forms['myForm']['_sess_id'].value;
+      var sess_id = $('#_sess_id').val();
       // băm pass, session_id
       var hashPass = CryptoJS.SHA256(inPass);
       // nối chuỗi hashPass với hashSess, và tiến hành băm
       var hPwdSess = CryptoJS.SHA256(hashPass + sess_id);
 
       // set lại url, rồi gửi đến server
-      document.forms['myForm']['_hashPass'].value = hPwdSess;
-      
+      //document.forms['myForm']['_hashPass'].value = hPwdSess;
+      $('#_hashPass').val(hPwdSess);
       return true;
 
       

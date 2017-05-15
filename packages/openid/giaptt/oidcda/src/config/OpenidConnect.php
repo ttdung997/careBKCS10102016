@@ -79,7 +79,12 @@ return [
 	/**
 	*	Cấu hình tên cho cookie lưu khi user đăng nhập
 	*/
-	'name_cookie' => 'loggedinstt',
+	'name_cookie' => 'loggedinstt1',
+
+	/**
+	*	Cấu hình tên cho cookie, khi admin đăng nhập
+	*/
+	'name_cookie_admin' => 'loggedinstt1ad',
 
 	/**
 	*	tên cookie khi user của viện ngoài đăng nhập vào.

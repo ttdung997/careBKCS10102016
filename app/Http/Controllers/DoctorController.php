@@ -28,6 +28,9 @@ use App\RBACController\UserManagement;
 use App\RBACController\ShareManagement;
 use App\RBACController\RoleManagement;
 use App\Model\Permission;
+use View;
+use Cookie;
+
 
 class DoctorController extends Controller 
 {
@@ -66,8 +69,10 @@ class DoctorController extends Controller
     }
 
     public function listPatient(){
+        $client_id = Session::get('client_id');
+        $op_sess_endpoint = Session::get('ss_endpoint');
 
-        return view('doctor.list');
+        return view('doctor.list', ['client_id' => $client_id, 'ss_endpoint' => $op_sess_endpoint]);
     }
 
     /**

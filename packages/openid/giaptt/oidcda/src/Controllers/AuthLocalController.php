@@ -215,11 +215,14 @@ class AuthLocalController extends Controller
         Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
         Cookie::queue(Cookie::forget('accessToken'));
         Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie')));
-
-        return redirect('login')->withCookie('session_state', $ss .'|'. $client_id, 60, '/', null, false, false)
+        //Cookie::queue(Cookie::forget('client_id_ss_endpoint'));
+        Cookie::queue(Cookie::forget('sess_stt'));
+        Cookie::queue(Cookie::forget('session_state'));
+        return redirect('login')
                 ->withCookie(Cookie::forget('accessToken'))
                 ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie')))
                 ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
+                //->withCookie('session_state', $ss .'|'. $client_id, 60, '/', null, false, false);
     }
 
     public function postLogout()
@@ -235,11 +238,14 @@ class AuthLocalController extends Controller
         Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
         Cookie::queue(Cookie::forget('accessToken'));
         Cookie::queue(Cookie::forget(config('OpenidConnect.name_cookie')));
-
-        return redirect('login')->withCookie('session_state', $ss .'|'. $client_id, 60, '/', null, false, false)
+        //Cookie::queue(Cookie::forget('client_id_ss_endpoint'));
+        Cookie::queue(Cookie::forget('sess_stt'));
+        Cookie::queue(Cookie::forget('session_state'));
+        return redirect('login')
                 ->withCookie(Cookie::forget('accessToken'))
                 ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie')))
                 ->withCookie(Cookie::forget(config('OpenidConnect.name_cookie_ex')));
+                //->withCookie('session_state', $ss .'|'. $client_id, 60, '/', null, false, false);
 
     }
 
@@ -287,10 +293,12 @@ class AuthLocalController extends Controller
         return view('oidcda::check-session');
     }
 
-    // hàm đăng ký OpenID
+    ///  hàm đăng ký OpenID
     public function getRegisterOpenId(Request $request)
     {
-        return view('oidcda::register-openid', ['response' => ""]);
+        $list_role = DB::table('roles')->get();
+        //compact('list_role')
+        return view('oidcda::register-openid', ['response' => "", 'list_role' => $list_role ]);
     }
 
     // hàm gửi request đăng ký đến OP
@@ -302,7 +310,8 @@ class AuthLocalController extends Controller
         $url_callback = config('OpenidConnect.uri_rp_callback'); // get trong file config
         $url_get_result = config('OpenidConnect.uri_rp_get_result');
         $url_del_endpoint = config('OpenidConnect.delete_endpoint');
-        
+        $role_id = $request->role;
+
         // thời gian mặc định là 2 giờ.
         $max_age = 2;
         switch ($request->select_max_age) {
@@ -333,6 +342,8 @@ class AuthLocalController extends Controller
         $isExist = DB::table('oidcrequests')->where('domain', $op_reg_url)->first();
         $body = [];
 
+        $list_role = DB::table('roles')->get();
+
         if ($isExist != null)   // đã tồn tại req trong 'list req'
         {
             if ($isExist->isAccept == 0) // req bị từ chối
@@ -352,7 +363,8 @@ class AuthLocalController extends Controller
                     'max_age' => $max_age,
                     'contacts' => $contacts,
                     'url_get_result' => $url_get_result,
-                    'url_delete' => $url_del_endpoint
+                    'url_delete' => $url_del_endpoint,
+                    'role_id' => $role_id
                 ];
 
                 $curl = curl_init();
@@ -386,7 +398,7 @@ class AuthLocalController extends Controller
                   //echo $response;
                   $data_response = json_decode($response, true);
                   //dd($data_response);
-                  return view('oidcda::register-openid', ['response' => $data_response['response_from_op']]);
+                  return view('oidcda::register-openid', ['response' => $data_response['response_from_op'], 'list_role' => $list_role]);
                 }
 
 
@@ -394,12 +406,12 @@ class AuthLocalController extends Controller
             elseif($isExist->isAccept == 1) // req đã đc chấp nhận.
             {
                 // không cho gửi req mới
-                return view('oidcda::register-openid', ['response' => 'request_already_processed']);
+                return view('oidcda::register-openid', ['response' => 'request_already_processed', 'list_role' => $list_role]);
             }
             else // req đã gửi và chưa đc xử lý.
             {
                 // không cho gửi req mới
-                return view('oidcda::register-openid', ['response' => 'request_already_exist']);
+                return view('oidcda::register-openid', ['response' => 'request_already_exist', 'list_role' => $list_role]);
             } 
         }
         else // chưa tồn tại
@@ -419,7 +431,8 @@ class AuthLocalController extends Controller
                 'max_age' => $max_age,
                 'contacts' => $contacts,
                 'url_get_result' => $url_get_result,
-                'url_delete' => $url_del_endpoint
+                'url_delete' => $url_del_endpoint,
+                'role_id' => $role_id
             ];
 
             // gửi yêu cầu register đến register endpoint của OpenId Provider
@@ -456,13 +469,16 @@ class AuthLocalController extends Controller
               //echo $response;
               $data_response = json_decode($response, true);
               //dd($data_response);
-              return view('oidcda::register-openid', ['response' => $data_response['response_from_op']]);
+              return view('oidcda::register-openid', ['response' => $data_response['response_from_op'], 'list_role' => $list_role]);
             }
 
         } // end if chưa tồn tại
     } // end function postRegisterOpenId
 
-    // hàm xử lý kết quả của việc đăng ký với OP
+
+    /**
+    *   Hàm xử lý kết quả đăng ký OpenID, khi OP gửi sang.
+    */
     public function postGetResultRegister(Request $request)
     {
         // chuyển trạng thái của yêu cầu có 'domain' = $op_reg_url sang "đã đc xử lý"
@@ -494,6 +510,7 @@ class AuthLocalController extends Controller
             $delete_endpoint = $request->delete_endpoint;
             $session_endpoint = $request->session_endpoint;
             $info_endpoint = $request->info_endpoint;
+            $role_id = $request->role_id;
 
             DB::table('oidcproviders')->insert([
                 ['id_provider' =>  $id_provider,
@@ -507,7 +524,8 @@ class AuthLocalController extends Controller
                 'info_endpoint' => $info_endpoint,
                 'client_id' => $client_id, 
                 'key_secret' => $key_secret, 
-                'algorithm' => $alg, 
+                'algorithm' => $alg,
+                'role_id' => $role_id, 
                 'max_age' => $max_age ] 
             ]);        
         }
@@ -521,7 +539,7 @@ class AuthLocalController extends Controller
     {
         $list_role = DB::table('roles')->get();
         // dd($list_role);
-        return view('oidcda::get-list-providers',compact('list_role'));
+        return view('oidcda::get-list-providers', compact('list_role'));
     }
 
     // hàm get danh sách các Clients
@@ -610,7 +628,7 @@ class AuthLocalController extends Controller
     }
 
     /**
-    *   Hàm trả kết quả đăng ký cho RP.
+    *   Hàm xử lý yêu cầu đăng ký OpenID của RP.
     */
     public function postRegistration(Request $request)
     {
@@ -622,6 +640,7 @@ class AuthLocalController extends Controller
         $contacts = $request->contacts;
         $url_del_endpoint = $request->url_delete;   // url của RP, OP khi xóa client sẽ gửi thông báo đến đó.
         $url_rp_get_result = $request->url_get_result;  // url của RP, OP send result đến đó.
+        $role_id = $request->role_id;
 
         // kiểm tra req trước khi đưa vào 'list req' chờ duyệt.
         $isExist = DB::table('oidcrequests')->where('domain', $domain)->first();
@@ -632,7 +651,7 @@ class AuthLocalController extends Controller
                     [   'domain' => $domain, 'company' => $company, 'url_callback' => $url_callback, 
                         'url_rp_get_result' => $url_rp_get_result, 'url_rp_delete' => $url_del_endpoint, 
                         'algorithm' => $algorithm, 'max_age' => $max_age, 'contacts' => $contacts, 
-                        'request_type' => false ]
+                        'request_type' => false, 'role_id' => $role_id ]
                 ]);
         }
         
@@ -641,7 +660,12 @@ class AuthLocalController extends Controller
             ]);
     }
     
-    // khi admin click "Accept/Denied" thì post data đến route này
+
+    /**
+    *   Hàm xử lý Accept/Denied một yêu cầu đăng ký OpenID từ RP.
+    *   Khi admin click "Accept/Denied" thì post data từ ajax gửi đến route này.
+    *   Tại đây sẽ tạo client_id, key_secret, ... rồi gửi lại cho RP.
+    */
     public function postHandleRequests(Request $request)
     {               
         // get lấy request_id và type_btn_id để thực hiện xử lý
@@ -676,6 +700,7 @@ class AuthLocalController extends Controller
                 $contacts = $record->contacts;
                 $max_age = $record->max_age;
                 $url_rp_delete = $record->url_rp_delete;
+                $role_id = $record->role_id;
 
                 DB::table('oidcclients')->insert([
                     'client_id' => $client_id,
@@ -708,7 +733,8 @@ class AuthLocalController extends Controller
                     'token_endpoint' => config('OpenidConnect.token_endpoint'),
                     'delete_endpoint' => config('OpenidConnect.delete_endpoint'),
                     'session_endpoint' => config('OpenidConnect.check_session_endpoint'),
-                    'info_endpoint' => config('OpenidConnect.info_endpoint')
+                    'info_endpoint' => config('OpenidConnect.info_endpoint'),
+                    'role_id' => $role_id
                 ];
             }
         }

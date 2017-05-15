@@ -83,23 +83,18 @@
 	  <label class="control-label">number of seconds</label>
 	</div> -->
 
-
-	
 	<!-- Multiple Radios (inline) -->
-	<!--
+	
 	<div class="form-group">
-	  <label class="col-md-4 control-label" for="Networking_Reception">Would you like to attend our Technical Product Update Session on September 4, 2015?</label>
+	  <label class="col-md-4 control-label" for="Networking_Reception">Chọn Vai trò (Role) cho bệnh viện</label>
 	  <div class="col-md-4"> 
-	    <label class="radio-inline" for="Networking_Reception-0">
-	      <input type="radio" name="Networking_Reception" id="Networking_Reception-0" value="meet_yes" checked="checked">
-	      Yes
-	    </label> 
-	    <label class="radio-inline" for="Networking_Reception-1">
-	      <input type="radio" name="Networking_Reception" id="Networking_Reception-1" value="meet_no">
-	      No
-	    </label>
+	  	@foreach($list_role as $role)
+            <div class="radio">
+              <label><input type="radio" name="role" value="{{$role->id}}">{{$role->name}}</label>
+            </div>
+        @endforeach
 	  </div>
-	</div>  -->
+	</div>  
 
 	<!-- Select Basic -->
 	<!--

@@ -60,7 +60,7 @@ class RPController extends Controller
             $payload = explode('.', $id_token)[1];
             $payload_decode = Base64Url::base64url_decode($payload);
             $data = json_decode($payload_decode, true);
-            $domain = $data['iss'];
+            $domain = $data['iss']; // domain của provider
             $ssop = $data['session_state'];
             $email = $data['email'];
             $name = $data['name'];
@@ -73,11 +73,12 @@ class RPController extends Controller
                 array('name' => $name, 'email' => $email, 'domain' => $domain, 'password' => str_random(32), 
                     'position' => 2, 'is_local' => false)
             );
+            
             Auth::loginUsingId($idUser);
 
             Session::put('loggedin_user', $email);
             Cookie::queue(config('OpenidConnect.name_cookie'), $email . '|' . $idUser);
-
+            
             return redirect('doctor/index')->withCookie(config('OpenidConnect.name_cookie_ex'), $cookie, $exp - $iat)
                 ->withCookie('sess_stt', $ssop, $exp - $iat, '/', null, false, false);
         }
@@ -105,7 +106,7 @@ class RPController extends Controller
                 $iss = RelyingParty::getData($id_token, 'iss'); // domain của provider
                 $provider = DB::table('oidcproviders')->where('domain', $iss)->first();
                 $op_sess_endpoint = $provider->session_endpoint;
-                return view('oidcda::doctor-ex', ['client_id' => $client_id, 'ss_endpoint' => $op_sess_endpoint]);
+                //return view('oidcda::doctor-ex', ['client_id' => $client_id, 'ss_endpoint' => $op_sess_endpoint]);
             }
             else
             {
@@ -114,7 +115,7 @@ class RPController extends Controller
                 $user = DB::table('users')->where('email', $email)->first();
                 if ($user->is_local == false) 
                 {
-                    DB::table('users')->where('email', $email)->delete();
+                    //DB::table('users')->where('email', $email)->delete();
                 }
                 //Auth::logout();
             }

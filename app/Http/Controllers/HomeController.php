@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\RBACController\UserManagement;
+use Giaptt\Oidcda\Authen;
 
 class HomeController extends Controller
 {

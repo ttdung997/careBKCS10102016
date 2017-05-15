@@ -67,6 +67,7 @@ Danh sách các Requests
                                     </div>
                                     <form>
                                         <div class="modal-body">
+                                            
                                             <div class="text-center">
                                                 <p>Xác nhận từ chối yêu cầu này?</p>
                                                 <input type="hidden" id="request_id" name="request_id" value="">
@@ -186,10 +187,10 @@ Danh sách các Requests
                     {
                         if (stt == true)
                         {
-                            valueReturn = '<button class="btn btn-success open-delete-user-modal handleRequest" type="button" id="myBtnAccept" name="myBtnAccept" value="myBtnAccept" disabled="true">Accept</button> <button class="btn btn-danger open-edit-user-modal handleRequest" type="button" id="myBtnDenied" name="myBtnDenied" value="myBtnDenied" disabled="true">Denied</button>';
+                            valueReturn = '<button class="btn btn-success open-delete-user-modal handleRequest" type="button" id="myBtnAccept" name="myBtnAccept" value="myBtnAccept" disabled="true" data-toggle="modal" data-target="#addRole">Accept</button> <button class="btn btn-danger open-edit-user-modal handleRequest" type="button" id="myBtnDenied" name="myBtnDenied" value="myBtnDenied" disabled="true">Denied</button>';
                         }
                         else
-                            valueReturn = '<button class="btn btn-success open-delete-user-modal handleRequest" type="button" id="myBtnAccept" name="myBtnAccept" value="myBtnAccept">Accept</button> <button class="btn btn-danger open-edit-user-modal handleRequest" type="button" id="myBtnDenied" name="myBtnDenied" value="myBtnDenied">Denied</button>';
+                            valueReturn = '<button class="btn btn-success open-delete-user-modal handleRequest" type="button" id="myBtnAccept" name="myBtnAccept" value="myBtnAccept" data-toggle="modal">Accept</button> <button class="btn btn-danger open-edit-user-modal handleRequest" type="button" id="myBtnDenied" name="myBtnDenied" value="myBtnDenied">Denied</button>';
                     }
                     else
                         valueReturn = "";

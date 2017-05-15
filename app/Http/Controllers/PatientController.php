@@ -196,19 +196,19 @@ class PatientController extends Controller
     public function postShare(Request $request){
         $roles = $request ->role;
         $resource_owner = Auth::user()->id;
-        $medicals = MedicalApplication::where('user_id','=',$resource_owner)->select('id')->get();
-        dd($roles);
+        $medical = MedicalApplication::where('user_id','=',$resource_owner)->first();
+        // dd($medicals->id);
 
         $share_mng = new ShareManagement();
-        if($oauth->getLocal()==true){
+        if($medical){
             $roles = $request ->role;
-            $resource_id = $request ->resource_id;
+            $resource_id = $medical->id;
             $resource_owner = Auth::user()->id;
-
             $share_mng ->addShare($resource_owner, $roles, $resource_id);
-            return redirect()->route('medical_exam_by_id',['id' => $resource_id])->with(['flash_level' => 'success', 'flash_message_success' => 'thành công !! Bạn đã thực hiện chia sẻ tài nguyên thành công']);
-        }else{
-            return redirect()->route('medical_exam_by_id',['id' => $resource_id])->with(['flash_level' => 'success', 'flash_message' => 'Cảnh báo!! Bạn không có quyền thực hiện tác vụ này']);;
+            return redirect()->route('patient-history',['id' => $resource_id])->with(['flash_level' => 'success', 'flash_message_success' => 'thành công !! Bạn đã thực hiện chia sẻ bệnh án thành công']);
+        }
+        else{
+            return redirect()->route('patient-history')->with(['flash_level' => 'success', 'flash_message' => 'Cảnh báo!! Bạn chưa đăng ký khám lần nào']);;
         }
     }
 }

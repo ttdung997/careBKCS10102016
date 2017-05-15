@@ -10,6 +10,19 @@
 <div class="form-group pull-right" >
 <button class="btn btn-default " data-toggle="modal" data-target="#myShare">Chia sẻ</button>
 </div>
+
+<div class="col-lg-12  ">
+    @if(Session::has('flash_message'))
+    <div class="alert alert-danger {!! Session::get('flash_level') !!}">
+        {!! Session::get('flash_message') !!}
+    </div>
+    @elseif(Session::has('flash_message_success'))
+    <div class="alert alert-success {!! Session::get('flash_level') !!}">
+        {!! Session::get('flash_message_success') !!}
+    </div>
+    @endif
+</div>
+
 <div id="myShare" class="modal fade" role="dialog">
       <div class="modal-dialog" style="z-index:10241;width: 800px" >
 
