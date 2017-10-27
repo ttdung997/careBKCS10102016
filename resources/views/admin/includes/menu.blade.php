@@ -9,6 +9,18 @@
 <li {{ (Request::is('admin/department') ? 'class=active' : '') }}>
     <a href="{!!URL::route('AdminController.index.department')!!}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Quản lý khoa</a>
 </li>
+<li {{ (Request::is('admin/degree') ? 'class=active' : '') }}>
+    <a href="{!!URL::route('AdminController.index.degree')!!}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Quản lý học vị</a>
+</li>
+<li {{ (Request::is('admin/office') ? 'class=active' : '') }}>
+    <a href="{!!URL::route('AdminController.index.office')!!}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Quản lý chức vụ</a>
+</li>
+<li {{ (Request::is('admin/room') ? 'class=active' : '') }}>
+    <a href="{!!URL::route('AdminController.index.room')!!}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Quản lý phòng</a>
+</li>
+<li {{ (Request::is('admin/MedicalTestType') ? 'class=active' : '') }}>
+    <a href="{!!URL::route('AdminController.index.MedicalTestType')!!}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Quản lý loại xét nghiệm</a>
+</li>
 <li {{ (Request::is('admin/doctor') ? 'class=active' : '') }}>
     <a href="{!!URL::route('AdminController.index.doctor')!!}"><svg class="glyph stroked pencil"><use xlink:href="#stroked-pencil"></use></svg> Quản lý bác sỹ</a>
 </li>

@@ -11,7 +11,8 @@
     <link href="{{ URL::asset('themes/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('themes/css/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('themes/css/styles.css') }}" rel="stylesheet">
-
+    
+    <script src="//code.jquery.com/jquery-1.12.3.js"></script>
     <!--Icons-->
     <script src="{{ URL::asset('themes/js/lumino.glyphs.js') }}"></script>
 

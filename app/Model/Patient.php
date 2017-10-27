@@ -9,6 +9,6 @@ class Patient extends Model
     protected $table ='patients';
 	public $timestamps = false;
     protected $fillable = [
-        'khoa', 'chucvu', 'bangcap'
+        'name'
     ];
 }

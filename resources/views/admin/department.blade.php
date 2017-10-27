@@ -13,13 +13,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.0/css/select.dataTables.min.css">
     <style type="text/css">
-        td.details-control {
-            background: url('{{ asset('public/admin/plugins/datatables/images/details_open.png') }}') no-repeat center center;
-            cursor: pointer;
-        }
-        tr.shown td.details-control {
-            background: url('{{ asset('public/admin/plugins/datatables/images/details_close.png') }}') no-repeat center center;
-        }
+        
     </style>
 @endsection
 

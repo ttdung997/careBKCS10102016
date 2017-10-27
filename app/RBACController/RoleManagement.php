@@ -14,6 +14,7 @@
 	{
 		const PATIENT_ROLE = 1; //role bệnh nhân
 		const STAFF_ROLE  = 2;  //role nhân viên
+		const DOCTOR_ROLE  = 3;  //role bác sĩ
 
 		/**
 		* Lấy ra danh sách các role

@@ -116,6 +116,11 @@
         if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
     })
 </script>
+
+
+<script>
+function open(){alert("123");}
+</script>
 </body>
 
 </html>

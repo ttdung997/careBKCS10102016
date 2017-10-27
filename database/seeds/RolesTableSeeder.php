@@ -13,8 +13,9 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         $role_mng = new RoleManagement();
-        $role_mng ->addRole(RoleManagement::PATIENT_ROLE,'role bệnh nhân','role này là role của các bệnh nhân');
-        $role_mng ->addRole(RoleManagement::STAFF_ROLE,'role nhân viên','role này quản lý các nhân viên');
+//        $role_mng ->addRole(RoleManagement::PATIENT_ROLE,'role bệnh nhân','role này là role của các bệnh nhân');
+//        $role_mng ->addRole(RoleManagement::STAFF_ROLE,'role nhân viên','role này quản lý các nhân viên');
+        $role_mng ->addRole(RoleManagement::DOCTOR_ROLE,'role bác sĩ','role này là role của bác sĩ');
         
     }
 }

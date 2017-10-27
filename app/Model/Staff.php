@@ -9,6 +9,6 @@ class Staff extends Model
     protected $table ='staffs';
 	public $timestamps = false;
     protected $fillable = [
-        'staff_id', 'phongban'
+        'staff_id', 'phongban','khoa','chucvu','bangcap'
     ];
 }

@@ -10,14 +10,13 @@ Danh sách chờ khám
 				<div class="panel panel-default">
 					<div class="panel-heading"></div>
 					<div class="panel-body">
-						<table data-toggle="table" data-url="{{ route('list-as-json') }}"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
+						<table data-toggle="table" data-url="{{ route('wait-for-test-list-as-json') }}"  data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
 						    <thead>
 						    <tr>
 						       
-						        <th data-field="id" data-sortable="true">Mã đơn khám</th>
-						        <th data-field="name"  data-sortable="true">Họ tên</th>
-						        <th data-field="id" data-sortable="true" data-formatter="operateFormatter"
-                        				>Khám bệnh</th>
+						        <th data-field="usersname"  data-sortable="true">Họ tên</th>
+						        <th data-field="usersname"  data-sortable="true">loại xét nghiệm</th>
+						       
 						    </tr>
 						    </thead>
 						</table>

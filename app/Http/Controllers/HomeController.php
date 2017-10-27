@@ -36,9 +36,9 @@ class HomeController extends Controller
         if(Auth::user()->position == UserManagement::STAFF_POSITION){
             return redirect()->route('StaffController.index');
         }
-        // if(Auth::user()->position ==  UserManagement::ADMIN_POSITION){
-        //     return redirect()->route('AdminController.index');
-        // }
+//         if(Auth::user()->position ==  UserManagement::ADMIN_POSITION){
+//             return redirect()->route('AdminController.index');
+//         }
         return view('home');
     }
 }

@@ -15,14 +15,14 @@ class CreateMedicalApplicationsTable extends Migration
     {
         Schema::create('medical_applications', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('patient_id')->unsigned();
             $table->datetime('date');
-            $table->integer('user_id')->unsigned();
             $table->tinyInteger('status');
             $table->string('url')->unique();
             $table->timestamps();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
+            $table->foreign('patient_id')
+                ->references('patient_id')
+                ->on('patients')
                 ->onDelete('cascade');
         });
     }

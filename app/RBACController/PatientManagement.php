@@ -3,7 +3,7 @@ namespace App\RBACController;
 
 use App\RBACController\UserManagement;
 use App\RBACController\MedicialManagement;
-
+use App\Model\Patient;
 use App\User;
 
 
@@ -67,7 +67,9 @@ class PatientManagement extends UserManagement
 	* Lấy ra danh sách bệnh nhân
 	*/
 	public function getListPatient(){
-		return $this->getListUserFollowPosition(self::PATIENT_POSITION);
+		//return $this->getListUserFollowPosition(self::PATIENT_POSITION);
+                $patient= Patient::get();
+                return $patient;
 	}
 
 	/**
