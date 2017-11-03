@@ -98,18 +98,8 @@ Phiếu đo dung phế
     <h2  class="col-md-offset-1">Danh sách các thiết bị ở phòng <?= $roomName . ' (' . $roomNumber . ')' ?></h2>
 
     <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalDevice">test</button>-->
+    <div id="divice-list">
 
-    <div class="form-group">
-        <label for="input_FVC" class="col-md-2 control-label">Thiết bị:</label>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#modalDevice">test</button>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="input_FVC" class="col-md-2 control-label">Thiết bị:</label>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#modalDevice">test 2</button>
-        </div>
     </div>
 
 
@@ -149,28 +139,28 @@ Phiếu đo dung phế
                 <div class="modal-body">
                     <h1>kết quả</h1>
                     <div class="form-group">
-                        <label for="input_FVC" class="col-md-2 ">Chỉ số 1 :</label>
+                        <label for="input_FVC"  class="col-md-2 ">Chỉ số 1 :</label>
                         <div class="col-md-6">
-                            <span>Đang cập nhật</span>
+                            <span id="chiso1">Đang cập nhật</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input_FVC" class="col-md-2 ">Chỉ số 2 :</label>
+                        <label for="input_FVC"  class="col-md-2 ">Chỉ số 2 :</label>
                         <div class="col-md-6">
-                            <span>Đang cập nhật</span>
+                            <span id="chiso2">Đang cập nhật</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input_FVC" class="col-md-2">Chỉ số 3:</label>
+                        <label for="input_FVC"  class="col-md-2">Chỉ số 3:</label>
                         <div class="col-md-6">
-                            <span >Đang cập nhật</span>
+                            <span id="chiso3">Đang cập nhật</span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" id="testStep">
                     <button onclick="check(1)" type="button" class="btn btn-warning">Kết nối thiết bị</button>
                     <button onclick="check(2)" type="button" class="btn btn-primary disabled">Đo kết quả</button>
-                    <button onclick="check(3)" type="button" class="btn btn-success disabled" data-dismiss="modal">Lưu kết quả</button>
+                    <button onclick="check(3)" type="button" class="btn btn-success disabled" data-dismiss="modal">Ngắt thiết bị</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -192,43 +182,127 @@ Phiếu đo dung phế
 
 </form>
 <script>
-    function load() {
+//    function load() {
+//        $.ajax({
+//            type: 'GET',
+//            url: '/staff/medical_test_by_api/<?php echo($medical_id); ?>',
+//            data: '_token = <?php echo csrf_token() ?>',
+//            success: function (data) {
+//                document.getElementById('input_FVC').value = data.FVC[0];
+//                document.getElementById('input_FEV1').value = data.FEV1[0];
+//                document.getElementById('input_PEF').value = data.PEF[0];
+//
+//            }
+//        });
+//    }
+    function getAPIConnect() {
+        var flag = 0;
         $.ajax({
             type: 'GET',
-            url: '/staff/medical_test_by_api/<?php echo($medical_id); ?>',
+            url: '/staff/get_API_connect/<?= $roomID ?>',
+            async: false,
             data: '_token = <?php echo csrf_token() ?>',
             success: function (data) {
-                document.getElementById('input_FVC').value = data.FVC[0];
-                document.getElementById('input_FEV1').value = data.FEV1[0];
-                document.getElementById('input_PEF').value = data.PEF[0];
+                console.log(data.msg);
+                flag = data.flag;
+            }
+        });
+        console.log(flag);
+        return flag;
+    }
 
+    function getAPIDisconnect(flag) {
+        var flag = 0;
+        $.ajax({
+            type: 'GET',
+            url: '/staff/get_API_disconnect/<?= $roomID ?>',
+            async: false,
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                console.log(data.msg);
+                flag = data.flag;
+            }
+        });
+        return flag;
+    }
+    function getAPIResult() {
+        $.ajax({
+            type: 'GET',
+            url: '/staff/get_API_result',
+            async: false,
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                document.getElementById('chiso1').innerHTML = data.FVC;
+                document.getElementById('chiso2').innerHTML = data.FEV1;
+                document.getElementById('chiso3').innerHTML = data.PEF;
             }
         });
     }
+//    function getApi() {
+//        load();
+////        window.setInterval(function () {
+////            load();
+////        }, 10000);
+//    }
+    var DV = document.getElementById('divice-list');
+    function addDevide() {
+        DV = DV + ' <div class="form-group">'
+                + '<label for="input_FVC" class="col-md-2 control-label">Thiết bị:</label>'
+                + '<div class="col-md-6">'
+                + '<button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#modalDevice">test 2</button>'
+                + ' </div>'
+                + ' </div>';
 
-    function getApi() {
-        load();
-        window.setInterval(function () {
-            load();
-        }, 10000);
     }
-    
-    function check(checkValue){
+    function getAPIdevice() {
+        $.ajax({
+            type: 'GET',
+            url: '/staff/get_API_device/<?= $roomID ?>',
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                var DV = document.getElementById('divice-list');
+                var i;
+                for (i = 0; i < data.device.length; i++) {
+                    DV.innerHTML = DV.innerHTML + ' <div class="form-group">'
+                            + '<label for="input_FVC" class="col-md-2 control-label">Thiết bị:</label>'
+                            + '<div class="col-md-6">'
+                            + '<button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#modalDevice">' + data.device[i] + '</button>'
+                            + ' </div>'
+                            + ' </div>';
+
+                }
+            }
+        });
+    }
+    getAPIdevice();
+    function check(checkValue) {
         var step = document.getElementById('testStep').children;
-        if(checkValue == 1){
-            console.log('step 1')
-            step[0].classList.add("disabled");
-            step[1].classList.remove("disabled");
-            step[2].classList.remove("disabled");
-            step[3].classList.add("disabled");
-        }else if(checkValue == 2){
+        if (checkValue == 1) {
+            var flag = getAPIConnect();
+            if (flag == 1) {
+                console.log('step 1')
+                step[0].classList.add("disabled");
+                step[1].classList.remove("disabled");
+                step[2].classList.remove("disabled");
+                step[3].classList.add("disabled");
+            } else
+                alert("Không thể kết nối tới thiết bị");
+        } else if (checkValue == 2) {
+            getAPIResult();
             console.log('step 2');
-        }else if(checkValue == 3){
+        } else if (checkValue == 3) {
             console.log('step 3');
-            step[0].classList.remove("disabled");
-            step[1].classList.add("disabled");
-            step[2].classList.add("disabled");
-            step[3].classList.remove("disabled");
+            var flag = getAPIDisconnect();
+            if (flag == 1) {
+                step[0].classList.remove("disabled");
+                step[1].classList.add("disabled");
+                step[2].classList.add("disabled");
+                step[3].classList.remove("disabled");
+                document.getElementById('chiso1').innerHTML = "Đang cập nhật";
+                document.getElementById('chiso2').innerHTML = "Đang cập nhật";
+                document.getElementById('chiso3').innerHTML = "Đang cập nhật";
+            } else
+                alert("Ngắt kết nối thất bại");
         }
     }
 

@@ -230,6 +230,16 @@ Route::group(['prefix' => 'staff'], function () {
             ->name('COPDtest-detail-json');
     
     //lấy kết quả và gửi lại kết quả qua Api
+     Route::get('get_API_connect/{roomID}', 'StaffController@getAPIConnect')
+            ->name('get_API_connect');
+     Route::get('get_API_disconnect/{roomID}', 'StaffController@getAPIDisconnect')
+            ->name('get_API_disconnect');
+     Route::get('get_API_result', 'StaffController@getAPIResult')
+            ->name('get_API_result');
+     Route::get('get_API_data', 'StaffController@getAPIData')
+            ->name('get_API_data');
+     Route::get('get_API_device/{roomID}', 'StaffController@getAPIDevice')
+            ->name('get_API_device');
      Route::get('medical_test_by_api/{id}', 'StaffController@getMedicalTestByAPi')
             ->name('medical_test_by_api');
     //route cho nhân viên tiếp tân

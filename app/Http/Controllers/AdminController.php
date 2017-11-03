@@ -35,6 +35,7 @@ use App\Model\Client_Role;
 use App\RBACController\DoctorManagement;
 use App\RBACController\RoleManagement;
 use App\RBACController\UserManagement;
+use App\RBACController\ApiManagement;
 
 class AdminController extends Controller {
 
@@ -423,11 +424,15 @@ class AdminController extends Controller {
      */
     public function storeDepartment(DepartmentRequest $request) {
         $department = new Department();
-        $department->name = $request->name;
-        $department->description = $request->description;
-        $department->save();
+        $ApiManagement = new ApiManagement();
+        $om2m = $ApiManagement->ApiAddDepartment($ApiManagement->stripVN($request->name));
 
-        return Response::json(['flash_message' => 'Đã thêm khoa!', 'message_level' => 'success', 'message_icon' => 'check']);
+        if ($om2m['flag'] == 1) {
+            $department->name = $request->name;
+            $department->description = $request->description;
+            $department->save();
+        }
+        return Response::json(['flash_message' => $om2m['msg'], 'message_level' => 'success', 'message_icon' => 'check']);
     }
 
     /**
@@ -472,14 +477,27 @@ class AdminController extends Controller {
      *
      */
     public function destroyDepartment(DepartmentRequest $request) {
+        $msg = "Đã xóa khoa!";
+        $ApiManagement = new ApiManagement();
         if (is_string($request->ids))
             $department_ids = explode(' ', $request->ids);
 
         foreach ($department_ids as $department_id) {
-            if ($department_id != NULL)
+            if ($department_id != NULL) {
+                $department = $ApiManagement->stripVN(DB::table('departments')
+                                ->where('id', $department_id)->first()->name);
+                $om2m = $ApiManagement->ApiRemoveDepartment($department);
+
+                if ($om2m['flag'] == 0) {
+                    $msg = $om2m['msg'];
+                    break;
+                }
+
                 Department::findOrFail($department_id)->delete();
+                DB::table('user_room')->where('department', $department_id)->delete();
+            }
         }
-        return Response::json(['flash_message' => 'Đã xóa khoa!', 'message_level' => 'success', 'message_icon' => 'check']);
+        return Response::json(['flash_message' => $msg, 'message_level' => 'success', 'message_icon' => 'check']);
     }
 
     /**
@@ -689,12 +707,23 @@ class AdminController extends Controller {
      *
      */
     public function storeRoom(RoomRequest $request) {
-        $room = new Room();
-        $room->name = $request->name;
-        $room->room_number = $request->room_number;
-        $room->save();
 
-        return Response::json(['flash_message' => 'Đã thêm phòng!', 'message_level' => 'success', 'message_icon' => 'check']);
+
+        $ApiManagement = new ApiManagement();
+        $department = $ApiManagement->stripVN(DB::table('departments')
+                        ->where('id', $request->department)->first()->name);
+        $room = $ApiManagement->stripVN($request->name);
+        $om2m = $ApiManagement->ApiAddRoom($department, $room);
+
+        if ($om2m['flag'] == 1) {
+            $room = new Room();
+            $room->name = $request->name;
+            $room->room_number = $request->room_number;
+            $room->department = $request->department;
+            $room->save();
+        }
+
+        return Response::json(['flash_message' => $om2m['msg'], 'message_level' => 'success', 'message_icon' => 'check']);
     }
 
     /**
@@ -720,6 +749,7 @@ class AdminController extends Controller {
             $room = Room::findOrFail($id);
             $room->name = $request->name;
             $room->room_number = $request->room_number;
+            $room->department = $request->department;
             $room->save();
 
             return Response::json(['flash_message' => 'Đã cập nhật thông tin chức vụ!', 'message_level' => 'success', 'message_icon' => 'check']);
@@ -739,12 +769,26 @@ class AdminController extends Controller {
      *
      */
     public function destroyRoom(DegreeRequest $request) {
+        $ApiManagement = new ApiManagement();
         if (is_string($request->ids))
-            $ofice_ids = explode(' ', $request->ids);
+            $room_ids = explode(' ', $request->ids);
 
-        foreach ($ofice_ids as $ofice_id) {
-            if ($ofice_id != NULL)
-                Room::findOrFail($ofice_id)->delete();
+        foreach ($room_ids as $room_id) {
+            if ($room_id != NULL) {
+                $Room = DB::table('user_room')
+                                ->where('id', $room_id)->first();
+                $department_id = $Room->department;
+                $room = $ApiManagement->stripVN($Room->name);
+                $department = DB::table('departments')->where('id', $department_id)->first()->name;
+                $department = $ApiManagement->stripVN($department);
+                $om2m = $ApiManagement->ApiRemoveRoom($department, $room);
+
+                if ($om2m['flag'] == 0) {
+                    $msg = $om2m['msg'];
+                    break;
+                }
+                Room::findOrFail($room_id)->delete();
+            }
         }
         return Response::json(['flash_message' => 'Đã xóa phòng!', 'message_level' => 'success', 'message_icon' => 'check']);
     }

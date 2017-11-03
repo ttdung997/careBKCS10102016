@@ -109,14 +109,27 @@ Quản lý phòng
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name">Số phòng</label>
-                             <input type="text" value="{{ old('room_number') }}" name="room_number" class="form-control" placeholder="" id="room_number">
-                           
+                            <input type="text" value="{{ old('room_number') }}" name="room_number" class="form-control" placeholder="" id="room_number">
+
                         </div>
                         <div class="form-group">
                             <label for="name">Tên</label>:
                             <input type="text" value="{{ old('name') }}" name="name" class="form-control" placeholder="" id="name">
                             <div id="errorUserName">
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Thuộc khoa: </label>:
+                            <select class="form-control" name="department" id='department'>
+                                <?php
+                                $department = DB::table('departments')->get();
+                                foreach ($department as $department) {
+                                    ?>
+                                    <option value="<?= $department->id ?>"><?= $department->name ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -430,6 +443,7 @@ Quản lý phòng
             var formData = {
                 name: $('#name').val(),
                 room_number: $('#room_number').val(),
+                department: $('#department').val()
             }
 
             //Used to determine the http verb to use [add=POST], [update=PATCH]

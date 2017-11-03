@@ -30,6 +30,7 @@ use App\RBACController\UserManagement;
 use App\RBACController\ShareManagement;
 use App\RBACController\RoleManagement;
 use App\OAuth\OAuthorization;
+use App\RBACController\ApiManagement;
 
 class StaffController extends Controller {
 
@@ -534,7 +535,7 @@ class StaffController extends Controller {
         $contents = Storage::get($medical->url);
         $medical_application_xml = simplexml_load_string($contents);
 
-        
+
         $FVC = $request->input('FVC');
         $medical_application_xml->phe_dung->FVC = $FVC;
         $FEV1 = $request->input('FEV1');
@@ -644,43 +645,108 @@ class StaffController extends Controller {
 
     public function getMedicalTestByAPi($id) {
         $msg = "đã nhận kết quả";
-        $curl = curl_init();
+        $api = new ApiManagement();
+        $om2m = $api->ApiMedicalTest();
+        return response()->json(array('FVC' => $om2m['FVC'], 'FEV1' => $om2m['FEV1'], 'PEF' => $om2m['PEF']), 200);
+    }
 
-        curl_setopt_array($curl, array(
-            CURLOPT_PORT => "8080",
-            CURLOPT_URL => "https://192.168.0.107:8080/~/mn-cse/mn-name/PULSE?op=currentPulse",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "origin: https://192.168.0.107:8080",
-                "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
-                "x-m2m-origin: admin:admin",
-                "x-requested-with: XMLHttpRequest"
-            ),
-        ));
+    public function getAPIConnect($roomID) {
+        $api = new ApiManagement();
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
+        $room = DB::table('user_room')->where('id', $roomID)->first();
+        $roomName = $room->name;
+        $department_id = $room->department;
+        $department = DB::table('departments')->where('id', $department_id)->first()->name;
+//        
+//       
+//        
+//        $json = $api->ApiInfomation();
+//        
+//        $department = $api->stripVN($department);
+//        $room = $api->stripVN($roomName);
+//        $port = $json['sensor'][0]['portCoAP'];
+//        $MACAddr = $json['sensor'][0]['MACAddr'];
+//        $addr = $json['addr'];
+//        
+//        $om2m= $api->ApiConnect($department,$room,$addr,$MACAddr,$port);
+//        $msg=$om2m['msg'];
+//        $flag =$om2m['flag'];
 
-        curl_close($curl);
+        $msg = "đã kết nối ";
+        $flag = 1;
 
-        if ($err) {
-            $msg = "cURL Error #:" . $err;
-        } else {
-            //$msg= $response;
-            $xml = simplexml_load_string($response);
-            $FVC=$xml->int[0]->attributes()->val[0];
-            $FEV1=$xml->int[1]->attributes()->val[0];
-            $PEF=$xml->int[2]->attributes()->val[0];
-           
-        }
-        return response()->json(array('FVC' => $FVC,'FEV1' => $FEV1,'PEF' => $PEF), 200);
+        return response()->json(array('flag' => $flag, 'msg' => $msg), 200);
+    }
+
+    public function getAPIDisconnect($roomID) {
+        $api = new ApiManagement();
+
+        $room = DB::table('user_room')->where('id', $roomID)->first();
+        $department_id = $room->department;
+        $department = DB::table('departments')->where('id', $department_id)->first()->name;
+
+        $json = $api->ApiInfomation();
+
+        $department = $api->stripVN($department);
+        $MACAddr = $json['sensor'][0]['MACAddr'];
+        $om2m = $api->ApiDisconnect($department, $MACAddr);
+
+//        $msg = $om2m['msg'];
+//        $flag =$om2m['flag'];
+
+        $msg = "đã ngắt kết nối";
+        $flag = 1;
+        return response()->json(array('msg' => $msg, 'flag' => $flag), 200);
+    }
+
+    public function getAPIResult() {
+        $msg = "đã nhận kết quả";
+        $api = new ApiManagement();
+
+        $department_id = DB::table('staffs')
+                        ->where('staff_id', Auth::user()->id)->first()->khoa;
+        $department = DB::table('departments')->where('id', $department_id)->first()->name;
+
+        $json = $api->ApiInfomation();
+
+        $department = $api->stripVN($department);
+        $port = $json['sensor'][0]['portCoAP'];
+        $addr = $json['addr'];
+
+        $om2m = $api->ApiResult($department, $port, $addr);
+        $FVC = $om2m['FVC'];
+        $FEV1 = $om2m['FEV1'];
+        $PEF = $om2m['PEF'];
+
+
+        $FVC = 10;
+        $FEV1 = 80;
+        $PEF = 70;
+        return response()->json(array('FVC' => $FVC, 'FEV1' => $FEV1, 'PEF' => $PEF), 200);
+    }
+
+    public function getAPIData() {
+        $msg = "đã nhận kết quả";
+        return response()->json(array('msg' => $msg), 200);
+    }
+
+    public function getAPIDevice($roomID) {
+        $room = DB::table('user_room')->where('id', $roomID)->first();
+        $roomName = $room->name;
+        $department = $room->department;
+
+//        $api = new ApiManagement();
+//        
+//        $room = $api->stripVN($room);
+//        $department= $api->stripVN($department);
+//        
+//        $om2m =  $api->ApiGetDevice($department, $room);
+//        $device = $om2m['device'];
+
+
+        $device[] = 'máy 1';
+        $device[] = 'máy 2';
+        return response()->json(array('device' => $device), 200);
     }
 
 }
