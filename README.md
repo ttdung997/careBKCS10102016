@@ -1,3 +1,9 @@
+Hướng dẫn cài đặt code quản lý bệnh viện:
+-Tạo 1 CSDL mới, import csdl dabv2.sql
+-Chỉnh sửa các thông tin về CSDL trong file .env
+-tạo virual host mới tới thư mục
+
+
 # Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)

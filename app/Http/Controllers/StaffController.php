@@ -681,15 +681,15 @@ class StaffController extends Controller {
     public function getAPIDisconnect($roomID) {
         $api = new ApiManagement();
 
-        $room = DB::table('user_room')->where('id', $roomID)->first();
-        $department_id = $room->department;
-        $department = DB::table('departments')->where('id', $department_id)->first()->name;
+        // $room = DB::table('user_room')->where('id', $roomID)->first();
+        // $department_id = $room->department;
+        // $department = DB::table('departments')->where('id', $department_id)->first()->name;
 
-        $json = $api->ApiInfomation();
+        // $json = $api->ApiInfomation();
 
-        $department = $api->stripVN($department);
-        $MACAddr = $json['sensor'][0]['MACAddr'];
-        $om2m = $api->ApiDisconnect($department, $MACAddr);
+        // $department = $api->stripVN($department);
+        // $MACAddr = $json['sensor'][0]['MACAddr'];
+        // $om2m = $api->ApiDisconnect($department, $MACAddr);
 
 //        $msg = $om2m['msg'];
 //        $flag =$om2m['flag'];
@@ -703,20 +703,20 @@ class StaffController extends Controller {
         $msg = "đã nhận kết quả";
         $api = new ApiManagement();
 
-        $department_id = DB::table('staffs')
-                        ->where('staff_id', Auth::user()->id)->first()->khoa;
-        $department = DB::table('departments')->where('id', $department_id)->first()->name;
+        // $department_id = DB::table('staffs')
+        //                 ->where('staff_id', Auth::user()->id)->first()->khoa;
+        // $department = DB::table('departments')->where('id', $department_id)->first()->name;
 
-        $json = $api->ApiInfomation();
+        // $json = $api->ApiInfomation();
 
-        $department = $api->stripVN($department);
-        $port = $json['sensor'][0]['portCoAP'];
-        $addr = $json['addr'];
+        // $department = $api->stripVN($department);
+        // $port = $json['sensor'][0]['portCoAP'];
+        // $addr = $json['addr'];
 
-        $om2m = $api->ApiResult($department, $port, $addr);
-        $FVC = $om2m['FVC'];
-        $FEV1 = $om2m['FEV1'];
-        $PEF = $om2m['PEF'];
+        // $om2m = $api->ApiResult($department, $port, $addr);
+        // $FVC = $om2m['FVC'];
+        // $FEV1 = $om2m['FEV1'];
+        // $PEF = $om2m['PEF'];
 
 
         $FVC = 10;
