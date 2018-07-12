@@ -33,6 +33,7 @@ use App\RBACController\RoleManagement;
 use App\Model\Permission;
 use View;
 use Cookie;
+use App\RBACController\ApiManagement;
 
 class DoctorController extends Controller {
 
@@ -755,6 +756,50 @@ class DoctorController extends Controller {
         }
 
         return redirect()->route('doctor-list');
+    }
+        public function getAPIConnect($roomID) {
+        $api = new ApiManagement();
+//dien tam cac them so
+        $department = "SOICT";
+        $MACAddr = "20000";
+        $port = "20000";
+        $addr = "10000";
+        $room = "room405";
+        $om2m= $api->ApiConnect($department,$room,$addr,$MACAddr,$port);
+       $msg=$om2m['msg'];
+       $flag =$om2m['flag'];
+
+
+        return response()->json(array('flag' => $flag, 'msg' => $msg), 200);
+    }
+
+    public function getAPIDisconnect($roomID) {
+        $api = new ApiManagement();
+
+       
+        //dien tam cac them so
+        $department = "SOICT";
+        $MACAddr = "20000";
+        $om2m = $api->ApiDisconnect($department, $MACAddr);
+
+       $msg = $om2m['msg'];
+       $flag =$om2m['flag'];
+
+       
+        return response()->json(array('msg' => $msg, 'flag' => $flag), 200);
+    }
+     public function getAPIResult() {
+        $msg = "đã nhận kết quả";
+        $api = new ApiManagement();
+
+        //dien tam cac them so
+        $department = "SOICT";
+        $port = "20000";
+        $addr = "10000";
+
+        // $om2m = $api->ApiTemResult($department, $port, $addr);
+        // $tem = $om2m['tem'];
+        return response()->json(array('tem' => '100'), 200);
     }
 
 }

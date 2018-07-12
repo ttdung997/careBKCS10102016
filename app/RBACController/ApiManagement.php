@@ -6,14 +6,14 @@
 
 namespace App\RBACController;
 
+include 'config.php';
 /**
  * class này quản lý Api
  */
 class ApiManagement {
-
-    //DEFINE
-    const PORT = 8181;
-    const HOST = "https://om2m.bkcs.com";
+    // //DEFINE
+    // const PORT = 8080;
+    // const HOST = "https://bkcs.om2m.com";
 
     public function stripVN($str) {
         $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
@@ -46,8 +46,8 @@ class ApiManagement {
         );
 
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name",
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -58,7 +58,7 @@ class ApiManagement {
             CURLOPT_POSTFIELDS => json_encode($postData),
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest",
@@ -84,8 +84,8 @@ class ApiManagement {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name/" . $department,
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/" . $department,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -95,7 +95,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "DELETE",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest",
@@ -127,8 +127,8 @@ class ApiManagement {
         );
 
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name/" . $department,
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/" . $department,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -139,7 +139,7 @@ class ApiManagement {
             CURLOPT_POSTFIELDS => json_encode($postData),
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest",
@@ -164,8 +164,8 @@ class ApiManagement {
     public function ApiRemoveRoom($department, $room) {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name/" . $department . "/" . $room,
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/" . $department . "/" . $room,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -175,7 +175,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "DELETE",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest",
@@ -200,8 +200,8 @@ class ApiManagement {
     public function ApiGetDevice($department, $room) {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name/.$department./.$room.?rcn=6",
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/.$department./.$room.?rcn=6",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -211,7 +211,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest"
@@ -237,13 +237,13 @@ class ApiManagement {
     }
 
     public function ApiConnect($department, $room, $addr, $MACAddr, $port) {
+        // print_r(HOST);
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT
-            . "/~/mn-cse/mn-name/SOICT?op=dtls_start_client&ipaddr=" . $addr
-            . "&port=" . $port . "&macaddr=" . $MACAddr
-            . "&room=ROOM_405&department=SOICT",
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_start_client&ipaddr=192.168.0.101&macaddr=0:12:4b:0:6:15:a9:74&room=ROOM_405&department=SOICT&port=20000&data=1",
+            // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_start_client&ipaddr=".$addr."&macaddr=".$MACAddr.":&room=".$room."&department=".$department."&port=".$port."&data=1",
+           
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -253,7 +253,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest"
@@ -279,12 +279,12 @@ class ApiManagement {
         return $data;
     }
 
-    public function ApiDisconnect($department, $MACAddr) {
+    public function ApiDisconnect($department, $Addr) {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT
-            . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&macaddr=" . $MACAddr,
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=om2m.com&port=20000",
+            // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=".$Addr."&port=".$port,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -294,7 +294,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest"
@@ -327,8 +327,8 @@ class ApiManagement {
     public function ApiResult($department, $port, $addr) {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT
             . "/~/mn-cse/mn-name/SOICT?"
             . "op=current_pulse&ipaddr=" . $addr . "&port=" . $port,
             CURLOPT_RETURNTRANSFER => true,
@@ -340,7 +340,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest"
@@ -366,12 +366,50 @@ class ApiManagement {
         $data['PEF'] = $PEF;
         return $data;
     }
+    public function ApiTemResult($department, $port, $addr) {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_data&ipaddr=om2m.com&port=20000&data=1",
+            // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_data&ipaddr=".$addr."&port=".$port."&data=1",
+            
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "origin: " . HOST . ":" . PORT,
+                "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
+                "x-m2m-origin: admin:admin",
+                "x-requested-with: XMLHttpRequest"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $msg = "cURL Error #:" . $err;
+        } else {
+            //$msg= $response;
+            $xml = simplexml_load_string($response);
+            $tem = $xml->int[0]->attributes()->val[0];
+        }
+        $data['tem'] = $tem;
+        return $data;
+    }
 
     public function ApiInfomation() {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name/CA?op=list_dev_6lbr&ipaddr=[bbbb::100]",
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/CA?op=list_dev_6lbr&ipaddr=[bbbb::100]",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -383,7 +421,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin"
             ),
@@ -407,8 +445,8 @@ class ApiManagement {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_PORT => ApiManagement::PORT,
-            CURLOPT_URL => ApiManagement::HOST . ":" . ApiManagement::PORT . "/~/mn-cse/mn-name/PULSE?op=currentPulse",
+            CURLOPT_PORT => PORT,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/PULSE?op=currentPulse",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -418,7 +456,7 @@ class ApiManagement {
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "origin: " . ApiManagement::HOST . ":" . ApiManagement::PORT,
+                "origin: " . HOST . ":" . PORT,
                 "user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
                 "x-m2m-origin: admin:admin",
                 "x-requested-with: XMLHttpRequest"

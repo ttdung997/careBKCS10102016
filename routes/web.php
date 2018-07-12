@@ -354,6 +354,14 @@ Route::group(['prefix' => 'doctor', 'middleware' => 'web'], function () {
             ->name('getListNotice');
     Route::post('test_insert', 'DoctorController@testInsert')
             ->name('test_insert');
+
+//lấy kết quả và gửi lại kết quả qua Api
+     Route::get('get_API_connect/{roomID}', 'DoctorController@getAPIConnect')
+            ->name('get_API_connect');
+     Route::get('get_API_disconnect/{roomID}', 'DoctorController@getAPIDisconnect')
+            ->name('get_API_disconnect');
+     Route::get('get_API_result', 'DoctorController@getAPIResult');
+
 });
 
 Route::post('remove-medical-application', 'PatientController@removeMedical');

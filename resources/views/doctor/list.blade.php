@@ -36,7 +36,13 @@ Danh sách chờ khám
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Khám sơ bộ</h4>
             </div>
-
+               <div class="modal-body" id="testStep">
+               <h4 class="modal-title">Kiểm tra nhiệt độ: </h4>
+                    <p>Kết quả: <span id="ketqua"></span>*C</p>
+                    <button onclick="check(1)" type="button" class="btn btn-warning">Kết nối thiết bị</button>
+                    <button onclick="check(2)" type="button" class="btn btn-primary ">Đo kết quả</button>
+                    <button onclick="check(3)" type="button" class="btn btn-success " data-dismiss="modal">Ngắt thiết bị</button>
+                </div>
             <form  action="/doctor/examination_begin" method="post">
                 <div class="modal-body">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -185,6 +191,52 @@ Danh sách chờ khám
         document.getElementById("button" + index).classList.remove("btn-danger");
         document.getElementById("button" + index).classList.add("btn-success");
         document.getElementById("button" + index).innerHTML = "Đang đợi";
+    }
+      function getAPIConnect() {
+        var flag = 0;
+        $.ajax({
+            type: 'GET',
+            url: '/doctor/get_API_connect/1',
+            async: false,
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                console.log(data.msg);
+                flag = data.flag;
+            }
+        });
+        console.log(flag);
+        return flag;
+    }
+
+    function getAPIDisconnect() {
+        var flag = 0;
+        $.ajax({
+            type: 'GET',
+            url: '/doctor/get_API_disconnect/1',
+            async: false,
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                console.log(data.msg);
+                flag = data.flag;
+            }
+        });
+        return flag;
+    }
+    function getAPIResult() {
+        $.ajax({
+            type: 'GET',
+            url: '/doctor/get_API_result',
+            async: false,
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                document.getElementById('ketqua').innerHTML = data.tem;
+            }
+        });
+    }
+    function check(i){
+        if (i == 1) getAPIConnect(1);
+        if (i == 2) getAPIResult();
+        if (i == 3) getAPIDisconnect();
     }
 </script>
 
