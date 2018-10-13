@@ -102,7 +102,16 @@ Phiếu đo dung phế
 
     </div>
 
+     <h2  class="col-md-offset-2">Cập nhật dữ liệu từ thiết bị di động</h2>
+     
 
+    <div class="form-group">
+     <div class="col-md-offset-1 col-md-7">
+             <button type="button" class="btn btn-primary form-control" onclick="getDataFromMobile()">nhận dữ liệu</button>
+    
+
+        </div></div>
+     <br>
     <h2 class="col-md-offset-3">Kết quả Đo phế dung phổi</h2>
     <div id = "theluc" class="">
         <div class="form-group">
@@ -305,7 +314,25 @@ Phiếu đo dung phế
                 alert("Ngắt kết nối thất bại");
         }
     }
+    function getDataFromMobile(){
+         $.ajax({
+            type: 'GET',
+            url: '/staff/get_data_mobile/<?=$medical_id?>',
+            async: false,
+            data: '_token = <?php echo csrf_token() ?>',
+            success: function (data) {
+                console.log(data);
+                if(data.flag > 0){
+                    document.getElementById('input_FVC').value = data.data.FVC;
+                    document.getElementById('input_FEV1').value = data.data.FEV1;
+                    document.getElementById('input_PEF').value = data.data.PEF;
+                }else{
+                    alert("không thể lấy dữ liệu từ thiết bị")
+                }
 
+            }
+        });
+    }
 </script>
 </script>
 @stop

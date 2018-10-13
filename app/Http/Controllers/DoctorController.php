@@ -797,9 +797,11 @@ class DoctorController extends Controller {
         $port = "20000";
         $addr = "10000";
 
-        // $om2m = $api->ApiTemResult($department, $port, $addr);
+        $om2m = $api->ApiTemResult($department, $port, $addr);
+        // echo $om2m['tem'];
         // $tem = $om2m['tem'];
-        return response()->json(array('tem' => '100'), 200);
+        // return response()->json(array('tem' => '100'), 200);
+        return response()->json(array('tem' => $om2m['tem']), 200);
     }
 
 }

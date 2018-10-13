@@ -480,6 +480,7 @@ class StaffController extends Controller {
             'FVC' => $ktp->FVC,
             'FEV1' => $ktp->FEV1,
             'PEF' => $ktp->PEF,
+            'medical_id'=>$medical_id,
         );
         $medical = MedicalTestApplication::where('id', $medical_id)->update(['status' => MedicialManagement::WAITING_STATUS]);
         $role_data = Role::wherenotIn('id', [RoleManagement::PATIENT_ROLE, RoleManagement::STAFF_ROLE])->orderBy('id')->get()->toArray();
@@ -748,5 +749,21 @@ class StaffController extends Controller {
         $device[] = 'máy 2';
         return response()->json(array('device' => $device), 200);
     }
-
+    public function getMedicalFormMobile($id){
+        $output = DB::table('medical_api_data')->where('medical_test_id',$id)
+        ->first();
+        if($output != NULL){
+            $flag = 1;
+            $paramStr= $output->param;
+            $param = explode("&",$paramStr);
+            foreach ($param as $param) {
+                $param = explode("=",$param);
+                $data[$param[0]] = (float)$param[1];
+            }
+        }else {
+            $flag = 0;
+            $data = 0;
+        }
+        return response()->json(array('data' => $data,'flag'=>$flag), 200);
+     }
 }

@@ -229,13 +229,15 @@ Danh sách chờ khám
             async: false,
             data: '_token = <?php echo csrf_token() ?>',
             success: function (data) {
+                // document.getElementById('ketqua').innerHTML = data.tem;
+                console.log(data);
                 document.getElementById('ketqua').innerHTML = data.tem;
             }
         });
     }
     function check(i){
         if (i == 1) getAPIConnect(1);
-        if (i == 2) getAPIResult();
+        if (i == 2) document.getElementById('ketqua').innerHTML = "100";
         if (i == 3) getAPIDisconnect();
     }
 </script>

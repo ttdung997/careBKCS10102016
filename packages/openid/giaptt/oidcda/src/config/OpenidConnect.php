@@ -16,7 +16,7 @@ return [
 	* 	Cấu hình domain hay issuer(iss) trong id_token trả về cho RP
 	*	Provider Name = config('app.name')
 	*/
-	'domain' => 'benhvien1.com',
+	'domain' => 'bv1.test',
 
 	/**
 	*	Cấu hình id token Endpoint

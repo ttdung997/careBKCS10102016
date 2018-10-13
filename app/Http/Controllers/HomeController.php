@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\RBACController\UserManagement;
 use Giaptt\Oidcda\Authen;
+use App\Http\Requests;
 
 class HomeController extends Controller
 {
@@ -40,5 +41,10 @@ class HomeController extends Controller
 //             return redirect()->route('AdminController.index');
 //         }
         return view('home');
+    }
+    public function cacheDataFormMobie(){
+         $msg = "oke";
+        return response()->json(array('msg' => $msg), 200);
+   
     }
 }

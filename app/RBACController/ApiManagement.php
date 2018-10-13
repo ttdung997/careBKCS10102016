@@ -241,7 +241,7 @@ class ApiManagement {
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_PORT => PORT,
-            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_start_client&ipaddr=192.168.0.101&macaddr=0:12:4b:0:6:15:a9:74&room=ROOM_405&department=SOICT&port=20000&data=1",
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_start_client&ipaddr=192.168.0.100&macaddr=0:12:4b:0:14:d5:2d:a2&room=ROOM_405&department=SOICT&port=20000&data=1",            
             // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_start_client&ipaddr=".$addr."&macaddr=".$MACAddr.":&room=".$room."&department=".$department."&port=".$port."&data=1",
            
             CURLOPT_RETURNTRANSFER => true,
@@ -283,8 +283,9 @@ class ApiManagement {
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_PORT => PORT,
-            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=om2m.com&port=20000",
-            // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=".$Addr."&port=".$port,
+            CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=192.168.0.100&port=20000",
+            // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=om2m.com&port=20000",
+            // CURLOPT_URL => HOST . ":" . PORT . "/~/mn-cse/mn-name/SOICT?op=dtls_stop_client&ipaddr=".$Addr."&port=".$port,            
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -398,10 +399,11 @@ class ApiManagement {
             $msg = "cURL Error #:" . $err;
         } else {
             //$msg= $response;
-            $xml = simplexml_load_string($response);
-            $tem = $xml->int[0]->attributes()->val[0];
+            // $xml = simplexml_load_string($response);
+            // $tem = $xml->int[0]->attributes()->val[0];
         }
-        $data['tem'] = $tem;
+        // $data['tem'] = $tem;
+        $data['tem'] = $response;
         return $data;
     }
 

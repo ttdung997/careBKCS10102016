@@ -15,6 +15,10 @@ Route::get('/', function() {
 });
 Route::get('/home', 'HomeController@index');
 
+Route::post('/token_api', 'ApiController@getToken');
+Route::post('/mobile_api', 'ApiController@cacheDataFormMobile');
+Route::post('/medical_api', 'ApiController@getMedicalIDformMobile');
+
 #login and logout
 // Auth::routes();
 #
@@ -236,12 +240,15 @@ Route::group(['prefix' => 'staff'], function () {
             ->name('get_API_disconnect');
      Route::get('get_API_result', 'StaffController@getAPIResult')
             ->name('get_API_result');
-     Route::get('get_API_data', 'StaffController@getAPIData')
+    Route::get('get_API_data', 'StaffController@getAPIData')
             ->name('get_API_data');
+
      Route::get('get_API_device/{roomID}', 'StaffController@getAPIDevice')
             ->name('get_API_device');
      Route::get('medical_test_by_api/{id}', 'StaffController@getMedicalTestByAPi')
             ->name('medical_test_by_api');
+     Route::get('get_data_mobile/{id}', 'StaffController@getMedicalFormMobile')
+            ->name('get_data_mobile_api');
     //route cho nhân viên tiếp tân
     //đợi kết quả xet nghiem
     Route::get('waitingTestListForTeller.json', 'StaffController@listWaitingTestForTellerAsJson')
